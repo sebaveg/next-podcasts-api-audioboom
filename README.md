@@ -4,7 +4,6 @@ App de Podcasts integrada con la API de AudioBoom para aprender Next.js
 
 ![Captura de la App](.readme-statis/captura.png)
 
-Captura 2
 ![Captura de la App](.readme-statis/captura2.png)
 
 [Ver la publicación](https://lab.sebastiancardoso92.now.sh/)
@@ -24,3 +23,5 @@ MIT
 ## Author
 
 Sebastian Cardoso Castillo (sebastiancardoso92@gmail.com)
+
+...

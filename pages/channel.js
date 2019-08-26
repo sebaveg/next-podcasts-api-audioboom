@@ -25,7 +25,7 @@ export default class extends React.Component {
 
   render() {
     const { channel, audioClips, series } = this.props
-    return <>
+    return <Layout title={channel.title}>
       <header>Podcasts</header>
 
       <h1>{channel.title}</h1>
@@ -84,6 +84,6 @@ export default class extends React.Component {
           text-align: center;
         }
       `}</style>
-    </>
+    </Layout>
   }
 }

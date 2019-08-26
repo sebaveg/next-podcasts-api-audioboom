@@ -1,32 +1,49 @@
 import Link from 'next/link'
+import Error from './_error'
+import Layout from '../components/Layout'
 
 export default class extends React.Component {
 
-  static async getInitialProps({ query }) {
+  static async getInitialProps({ query, res }) {
     let id = query.id
 
-    let [reqChannel, reqSeries, reqAudios] = await Promise.all([
-      fetch(`https://api.audioboom.com/channels/${id}`),
-      fetch(`https://api.audioboom.com/channels/${id}/child_channels`),
-      fetch(`https://api.audioboom.com/channels/${id}/audio_clips`)
-    ])
+    try {
 
-    let dataChannel = await reqChannel.json()
-    let channel = dataChannel.body.channel
+      let [reqChannel, reqSeries, reqAudios] = await Promise.all([
+        fetch(`https://api.audioboom.com/channels/${id}`),
+        fetch(`https://api.audioboom.com/channels/${id}/child_channels`),
+        fetch(`https://api.audioboom.com/channels/${id}/audio_clips`)
+      ])
 
-    let dataAudios = await reqAudios.json()
-    let audioClips = dataAudios.body.audio_clips
+      if (reqChannel.status >= 404) {
+        res.statusCode = reqChannel.status
+        return { channel: null, audioClips: null, series: null, statusCode: reqChannel.status }
+      }
 
-    let dataSeries = await reqSeries.json()
-    let series = dataSeries.body.channels
+      let dataChannel = await reqChannel.json()
+      let channel = dataChannel.body.channel
 
-    return { channel, audioClips, series }
+      let dataAudios = await reqAudios.json()
+      let audioClips = dataAudios.body.audio_clips
+
+      let dataSeries = await reqSeries.json()
+      let series = dataSeries.body.channels
+
+      return { channel, audioClips, series, statusCode: 200 }
+
+    } catch (e) {
+      return { channel: null, audioClips: null, series: null, statusCode: 503 }
+    }
   }
 
   render() {
-    const { channel, audioClips, series } = this.props
+    const { channel, audioClips, series, statusCode } = this.props
+
+    if (statusCode !== 200) {
+      return <Error statusCode={ statusCode } />
+    }
+
     return <Layout title={channel.title}>
-      <header>Podcasts</header>
 
       <h1>{channel.title}</h1>
 

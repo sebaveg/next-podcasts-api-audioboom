@@ -25,7 +25,16 @@ export default class extends React.Component {
 
     return <Layout title="Super Podcasts">
 
-      <ChannelGrid channels={ channels } />
+      <ChannelGrid channels={channels} />
+      
+      <style jsx>{`
+        h6{
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          right: 20px;
+        }
+      `}</style>
       
     </Layout>
   }
